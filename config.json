@@ -1,4 +1,8 @@
 {
   "PORT": 3000,
-  "express_debug": true
+  "express_debug": true,
+  "mongo_host": "localhost",
+  "mongo_user": "mohamed",
+  "mongo_pass": "pws",
+  "mongo_database": "RebooJS"
 }
