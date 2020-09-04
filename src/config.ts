@@ -10,6 +10,16 @@ export interface IConfig {
   express_debug: boolean;
 }
 
+export interface IConfig {
+  PORT: number,
+  express_debug: boolean,
+  mongo_host: string,
+  mongo_user: string,
+  mongo_pass: string,
+  mongo_database: string,
+  mongo_debug: boolean
+}
+
 export function configuration(): IConfig {
   const result: any = { ...defaultConfig };
   for (const key in result) {

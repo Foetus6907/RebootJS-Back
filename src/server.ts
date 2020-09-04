@@ -2,6 +2,8 @@ import express, { Request, Response, ErrorRequestHandler } from 'express';
 import morgan from "morgan";
 import helmet from "helmet";
 import { configuration, IConfig } from "./config";
+import { ProfilModel } from './models/profils';
+import {connect} from "./database";
 
 export function createExpressApp(config: IConfig): express.Express {
   const { express_debug } = config;
@@ -19,10 +21,21 @@ export function createExpressApp(config: IConfig): express.Express {
 
   app.get('/', (req: Request, res: Response) => { res.send('This is the boilerplate for Flint Messenger app') });
 
+  app.post('/profil', (req: Request, res:Response) => {
+    const {email, firstname, lastname} = req.body
+
+    const newProfile = new ProfilModel({email: email, firstname: firstname, lastname: lastname})
+    newProfile.save()
+    res.send('User created')
+
+  })
+
   return app;
 }
 
 const config = configuration();
 const { PORT } = config;
 const app = createExpressApp(config);
-app.listen(PORT, () => console.log(`Flint messenger listening at ${PORT}`));
+connect(config).then(
+    () => {app.listen(PORT, () => console.log(`Flint messenger listening at ${PORT}`));}
+)

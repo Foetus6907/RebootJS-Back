@@ -1,8 +1,9 @@
 {
   "PORT": 3000,
   "express_debug": true,
-  "mongo_host": "localhost",
+  "mongo_host": "rebootjs.km9i6.mongodb.net",
   "mongo_user": "mohamed",
   "mongo_pass": "pws",
-  "mongo_database": "RebooJS"
+  "mongo_database": "RebooJS",
+  "mongo_debug": true
 }
