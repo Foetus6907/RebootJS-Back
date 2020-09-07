@@ -9,4 +9,4 @@ jobs:
     - name: UnitTest
       stage: testing
       install: npm install
-      script: npm run jest
+      script: npm run test
