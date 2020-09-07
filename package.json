@@ -13,8 +13,7 @@
     "mongoose": "^5.10.3",
     "morgan": "^1.10.0",
     "ts-node": "^9.0.0",
-    "tsc": "^1.20150623.0",
-    "typescript": "^4.0.2"
+    "dotenv": "^8.2.0"
   },
   "devDependencies": {
     "@types/hapi__joi": "^17.1.2",
@@ -22,7 +21,9 @@
     "@types/morgan": "^1.9.1",
     "dotenv": "^8.2.0",
     "jest": "^26.1.0",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "tsc": "^1.20150623.0",
+    "typescript": "^4.0.2"
   },
   "scripts": {
     "start": "npm run build && node -r dotenv/config ./dist/server.js",
