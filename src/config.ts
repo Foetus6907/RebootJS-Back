@@ -1,6 +1,7 @@
 import { config } from 'dotenv';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
+import * as confjson from '../config.json'
 
 config();
 const defaultConfig = JSON.parse(readFileSync(resolve(__dirname, '../config.json')).toString());
@@ -20,7 +21,7 @@ export interface IConfig {
 }
 
 export function configuration(): IConfig {
-  const result: any = { ...defaultConfig };
+  const result: any = { ...confjson };
   for (const key in result) {
     if (key in process.env) result[key] = process.env[key];
   }
