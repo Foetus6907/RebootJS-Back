@@ -13,4 +13,4 @@ const profilSchema = new Schema({
 })
 
 
-export const ProfilModel = model<IProfil, Model<IProfil>>("profils.ts", profilSchema)
+export const ProfilModel = model<IProfil, Model<IProfil>>("profils", profilSchema)

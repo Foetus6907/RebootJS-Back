@@ -15,7 +15,6 @@ export interface IConfig {
   express_debug: boolean,
   mongo_host: string,
   mongo_user: string,
-  mongo_pass: string,
   mongo_database: string,
   mongo_debug: boolean
 }

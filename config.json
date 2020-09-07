@@ -4,6 +4,6 @@
   "mongo_host": "rebootjs.km9i6.mongodb.net",
   "mongo_user": "mohamed",
   "mongo_pass": "pws",
-  "mongo_database": "RebooJS",
+  "mongo_database": "messenger",
   "mongo_debug": true
 }
