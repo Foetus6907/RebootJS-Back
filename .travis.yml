@@ -1,0 +1,12 @@
+language: node_js
+node_js:12
+
+stages:
+  - testing
+
+jobs:
+  includes:
+    - name: UnitTest
+      stage: testing
+      install: npm install
+      script: npm run jest
