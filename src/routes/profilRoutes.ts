@@ -1,13 +1,15 @@
 import {Request, Response, Router} from "express";
 import {ProfilModel} from "../models/profils";
+import authenticationRequired from "../middleware/authenticationRequire";
 
 const router = Router();
 
 router.post('/', (req: Request, res:Response) => {
     const {email, firstname, lastname, password} = req.body
 
-    const newProfile = new ProfilModel({email: email, firstname: firstname, lastname: lastname, password: password})
-    newProfile.save()
+    const newProfil = new ProfilModel({email: email, firstname: firstname, lastname: lastname})
+    newProfil.setPassword(password)
+    newProfil.save()
         .then((response) => {
             // console.log(response)
             return res.status(201).send(response)
@@ -18,7 +20,7 @@ router.post('/', (req: Request, res:Response) => {
         });
 })
 
-router.get('/:id', (req:Request, res:Response) => {
+router.get('/:id', authenticationRequired, (req:Request, res:Response) => {
     const id = req.params['id'];
     if (id !== undefined) {
         ProfilModel.findById(id)

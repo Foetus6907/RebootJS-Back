@@ -17,11 +17,11 @@ const profilSchema = new Schema({
 })
 
 profilSchema.methods.setPassword = function(password: string) {
-    this.password = password;
+    this.password = SHA256(password).toString();
 }
 
 profilSchema.methods.verifyPassword = function (password: string) {
-    return this.password === password;
+    return this.password === SHA256(password).toString();
 };
 
 export const ProfilModel = model<IProfil, Model<IProfil>>("profils", profilSchema)

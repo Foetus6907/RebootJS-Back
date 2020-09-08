@@ -9,9 +9,14 @@ import loginRoutes from "./routes/loginRoutes";
 
 import { ProfilModel } from './models/profils';
 import {authenticationInitialize} from "./controllers/authentification";
+import session from "express-session";
+import connectMongo from "connect-mongo";
+import mongoose from "mongoose";
+
+const MongoStore = connectMongo(session);
 
 export function createExpressApp(config: IConfig): express.Express {
-  const { express_debug } = config;
+  const { express_debug, session_cookie_name, session_secret_key } = config;
 
   const app = express();
   app.use (authenticationInitialize());
@@ -22,6 +27,16 @@ export function createExpressApp(config: IConfig): express.Express {
   app.use(morgan('combined'));
   app.use(helmet());
   app.use(express.json());
+
+
+  app.use(session({
+    name: session_cookie_name,
+    secret: session_secret_key,
+    resave: false,
+    saveUninitialized: false,
+    store: new MongoStore({mongooseConnection: mongoose.connection}),
+  }))
+
   // app.use(passport.initialize())
   // app.use(passport.session());
   //app.

@@ -17,7 +17,9 @@ export interface IConfig {
   mongo_host: string,
   mongo_user: string,
   mongo_database: string,
-  mongo_debug: boolean
+  mongo_debug: boolean,
+  session_cookie_name: string
+  session_secret_key: string
 }
 
 export function configuration(): IConfig {
