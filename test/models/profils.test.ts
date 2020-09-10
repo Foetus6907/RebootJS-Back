@@ -1,6 +1,6 @@
-const { ProfilModel } = require('../../src/models/profils');
+const { Profil } = require('../../src/models/profils');
 
-const profil = new ProfilModel({email: 'test@test.gmail', firstname: 'testfirst', lastname: 'testlast'})
+const profil = new Profil({email: 'test@test.gmail', firstname: 'testfirst', lastname: 'testlast'})
 
 
 describe('Profil functions', () => {

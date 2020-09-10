@@ -1,43 +1,43 @@
 import {Request, Response, Router} from "express";
-import {ProfilModel} from "../models/profils";
+import {Profil} from "../models/profils";
 import authenticationRequired from "../middleware/authenticationRequire";
+import {getAllProfiles, getProfile} from "../controllers/profils";
 
 const router = Router();
+router.post('/', (req: Request, res: Response) => {
+  const { email, firstname, lastname, password } = req.body;
 
-router.post('/', (req: Request, res:Response) => {
-    const {email, firstname, lastname, password} = req.body
+  const newProfile = new Profil({email: email, firstname: firstname, lastname: lastname});
+  newProfile.setPassword(password);
+  newProfile.save();
 
-    const newProfil = new ProfilModel({email: email, firstname: firstname, lastname: lastname})
-    newProfil.setPassword(password)
-    newProfil.save()
-        .then((response) => {
-            // console.log(response)
-            return res.status(201).send(response)
-        })
-        .catch((error) => {
-            // console.log("Post error : ", error.message)
-            return res.status(401).header('Error', error.message).send(null)
-        });
-})
+  res.send('Utilisateur créé');
+});
 
-router.get('/:id', authenticationRequired, (req:Request, res:Response) => {
-    const id = req.params['id'];
-    if (id !== undefined) {
-        ProfilModel.findById(id)
-            .then((profil) => {
-                // console.log(profil)
-                if (profil !== null) {
-                    res.status(200).send(profil)
-                } else {
-                    res.status(404).send({})
-                }
-            }).catch((error) => {
-            // console.log('error get by id:', id, error.message)
-            res.status(400).header('Error', error.message).send('no user')
-        })
-    } else {
-        return res.status(404).send('No parameter id')
+router.get('/:profileId', authenticationRequired, (req: Request, res: Response) => {
+  const profileId = req.params['profileId'];
+
+  getProfile(profileId)
+    .then(profile => {
+      if(profile === null) { return res.status(404).send("Profile not found"); }
+      return res.send(profile.getSafeProfil());
+    }).catch(error => {
+      console.error(error);
+      return res.status(500).send()
     }
+  )
+});
+
+router.get('/', (req: Request, res: Response) => {
+  getAllProfiles()
+    .then(profiles => profiles.map(profile => profile.getSafeProfil()))
+    .then(safeProfiles => {
+      return res.status(200).send(safeProfiles);
+    })
+    .catch(error => {
+      console.error(error);
+      return res.status(500).send();
+    })
 })
 
 export default router;

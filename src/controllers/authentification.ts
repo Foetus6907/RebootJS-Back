@@ -1,13 +1,13 @@
 import {Strategy}  from 'passport-local';
 import passport from 'passport'
-import {IProfil, ProfilModel} from "../models/profils";
+import {IProfil, Profil} from "../models/profils";
 import {Handler} from "express";
 
 passport.use(
     new Strategy((username: string, password:string, done: any) => {
         console.log('new strategy callback')
         try {
-            ProfilModel.findOne({email: username}, null, (err, profil) => {
+            Profil.findOne({email: username}, null, (err, profil) => {
                 if (err) {
                     return done(err);
                 }
@@ -15,10 +15,10 @@ passport.use(
                     if (profil.verifyPassword(password)) {
                         return done(null, profil);
                     } else {
-                        return done(new Error('Password verification failed'));
+                      return done(new IncorrectPasswordError('Password is incorrect'))
                     }
                 }
-                return done(new Error('Profile not found'))
+                return done(new ProfilNotFoundError('Profile not found'));
             });
         } catch (e) {
             return done(e)
@@ -32,7 +32,7 @@ passport.serializeUser(
 
 passport.deserializeUser(
   (_id, done) => {
-    ProfilModel.findById(_id, (err, profil: IProfil) => {
+    Profil.findById(_id, (err, profil: IProfil) => {
       if (err) {
         return  done(err)
       } else {
@@ -44,3 +44,5 @@ passport.deserializeUser(
 
 export const authenticationInitialize = (): Handler => passport.initialize();
 export const authenticationSession = (): Handler => passport.session();
+export class ProfilNotFoundError extends Error {}
+export class IncorrectPasswordError extends Error {}
