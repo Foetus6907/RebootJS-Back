@@ -1,5 +1,5 @@
 import {Request, Response, Router} from "express";
-import {Profil} from "../models/profils";
+import {IProfil, Profil} from "../models/profils";
 import authenticationRequired from "../middleware/authenticationRequire";
 import {getAllProfiles, getProfile} from "../controllers/profils";
 
@@ -38,6 +38,12 @@ router.get('/', (req: Request, res: Response) => {
       console.error(error);
       return res.status(500).send();
     })
-})
+});
+
+
+router.get("/:profileId", authenticationRequired, (request: Request, response: Response) => {
+  if(!request.user) { return response.status(401).send() }
+  return response.json((request.user as IProfil).getSafeProfil());
+});
 
 export default router;
