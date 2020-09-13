@@ -40,10 +40,10 @@ router.get('/', (req: Request, res: Response) => {
     })
 });
 
-
+/*
 router.get("/:profileId", authenticationRequired, (request: Request, response: Response) => {
   if(!request.user) { return response.status(401).send() }
   return response.json((request.user as IProfil).getSafeProfil());
 });
-
+*/
 export default router;
