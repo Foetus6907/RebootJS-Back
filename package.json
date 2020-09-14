@@ -4,7 +4,7 @@
   "description": "Backend of the Messenger app for the RebootJS training",
   "main": "dist/server.js",
   "scripts": {
-    "start": "npm run build && node -r dotenv/config ./dist/src/server.js",
+    "start": "node -r dotenv/config ./dist/src/server.js",
     "build": "tsc --project tsconfig.json",
     "test": "jest",
     "dev": "nodemon -r dotenv/config src/server.ts",
