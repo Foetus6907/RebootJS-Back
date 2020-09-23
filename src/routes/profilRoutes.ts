@@ -83,13 +83,19 @@ router.delete("/", authenticationRequired, (req: Request, res: Response) => {
     });
 });
 
-router.post('conversation-seen/:conversationId', authenticationRequired, async (req, res) => {
+router.patch('/conversation-seen/:conversationId', authenticationRequired, async (req, res) => {
     const user = req.user as IProfil;
     const conversationId = req.params['conversationId'];
+    console.log('ici', conversationId)
 
     user.updateSeen(conversationId, new Date().toISOString());
-    const savedUser = await user.save();
-    return res.status(200).send(savedUser)
+    try {
+        const savedUser = await user.save();
+        return res.status(200).send(savedUser)
+    } catch (e) {
+        console.log('Error udpate user conversation-seen', e)
+        return res.status(401).send('Error udpate user conversation-seen')
+    }
 })
 
 export default router;
