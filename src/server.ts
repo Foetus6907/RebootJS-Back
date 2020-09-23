@@ -7,6 +7,7 @@ import {connect} from "./database";
 import bodyParser from "body-parser";
 import profileRoutes from './routes/profilRoutes';
 import loginRoutes from "./routes/loginRoutes";
+import messageRoutes from "./routes/messageRoutes"
 
 import {authenticationInitialize, authenticationSession} from "./controllers/authentification";
 import session from "express-session";
@@ -48,6 +49,7 @@ export function createExpressApp(config: IConfig): express.Express {
 
   app.use('/profil', profileRoutes);
   app.use('/login', loginRoutes);
+  app.use('/messages', messageRoutes);
 
   return app;
 }
