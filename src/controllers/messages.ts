@@ -13,14 +13,22 @@ export async function createMessage(targets:string[], conversationId:string, emi
 export async function getAllMessagesByUser(user: IProfil, conversationId?: string): Promise<IMessage[] | null> {
 	try {
 		const userId = user._id;
+
 		const query: {$or: any, $and?: any} = {
 			$or: [
 				{emitter: userId},
-				{target: userId},
+				{targets: userId},
 			],
 			$and:[{ conversationId: conversationId }]
 		}
 		if (!conversationId) delete query.$and;
+
+		const messagefind = await Message.find(
+			query,
+			null,
+			{ sort: {createdAt: 1}}
+		)
+		console.log('messsage query fund', messagefind, query)
 
 		return await Message.find(
 			query,

@@ -13,8 +13,11 @@ import {authenticationInitialize, authenticationSession} from "./controllers/aut
 import session from "express-session";
 import connectMongo from "connect-mongo";
 import mongoose from "mongoose";
+import { initializeSockets } from './socket';
+
 
 const MongoStore = connectMongo(session);
+const sessionStore = new MongoStore({mongooseConnection: mongoose.connection});
 
 export function createExpressApp(config: IConfig): express.Express {
   const { express_debug, session_cookie_name, session_secret_key } = config;
@@ -34,7 +37,7 @@ export function createExpressApp(config: IConfig): express.Express {
     secret: session_secret_key,
     resave: false,
     saveUninitialized: false,
-    store: new MongoStore({mongooseConnection: mongoose.connection}),
+    store: sessionStore
   }))
 
   app.use (authenticationInitialize());
@@ -58,5 +61,8 @@ const config = configuration();
 const { PORT } = config;
 const app = createExpressApp(config);
 connect(config).then(
-    () => {app.listen(PORT, () => console.log(`Flint messenger listening at ${PORT}`));}
+    () => {
+      const server = app.listen(PORT, () => console.log(`Flint messenger listening at ${PORT}`));
+      initializeSockets(config, server,sessionStore)
+    }
 )

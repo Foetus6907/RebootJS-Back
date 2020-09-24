@@ -10,6 +10,7 @@ export interface IProfil extends Document {
     getSafeProfil: () => ISafeProfil;
     conversationSeen: {[conversationId: string]: string}
     updateSeen: (conversationId: string, seenDate: string) => void;
+    socket?: string
 }
 
 export type ISafeProfil = Pick<IProfil, '_id' | 'email' | 'lastname' | 'firstname' | 'conversationSeen'>
@@ -19,7 +20,8 @@ const profilSchema = new Schema({
     firstname: {type: String, required: true},
     lastname: {type: String, required: true},
     password: {type: String, required:true},
-    conversationSeen: {type: Object}
+    conversationSeen: {type: Object},
+    socket: { type: String },
 })
 
 profilSchema.methods.getSafeProfil = function(): ISafeProfil {

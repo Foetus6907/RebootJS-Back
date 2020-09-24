@@ -2,7 +2,8 @@ import {Request, Response, Router} from "express";
 import {IMessage, Message} from "../models/messages";
 import * as messagesController from "../controllers/messages";
 import authenticationRequired from "../middleware/authenticationRequire";
-import {IProfil} from "../models/profils";
+import {IProfil, Profil} from "../models/profils";
+import {io} from "../socket";
 
 const router = Router();
 
@@ -16,7 +17,18 @@ router.post("/", authenticationRequired , async (req: Request, res: Response) =>
 	try {
 		const createdMessage = await messagesController.createMessage(targets, conversationId,user._id , content)
 		if (createdMessage) {
-			return res.status(201).send(createdMessage);
+			res.status(201).send(createdMessage);
+
+			return await Promise.all(
+				createdMessage.targets.map(async (target: string) => {
+					const profil = await Profil.findById(target);
+					const socketId = profil?.socket;
+					if(socketId) {
+						console.log('Emitting message...', socketId, target)
+						io.to(socketId).emit('new-message-received', createdMessage.toJSON())
+					}
+				})
+			)
 		} else {
 			return res.status(400).send("Error creating message");
 		}
@@ -66,10 +78,13 @@ router.get("/:conversationId", authenticationRequired, async (req: Request, res:
 
 // Read all Message by user and
 router.get("/", authenticationRequired, async (req: Request, res: Response) => {
-	console.log('byUserConversation')
+	console.log('byUserConversation', req.user)
 	if(req.user) {
 		try {
 			const messages = await messagesController.getAllMessagesByUser(req.user as IProfil);
+			console.log('byUserConversation', messages)
+
+
 			return res.json(messages)
 		} catch (e) {
 			console.log("Error getting messages by user", e);
