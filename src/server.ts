@@ -50,8 +50,8 @@ export function createExpressApp(config: IConfig): express.Express {
 
   app.get('/', (req: Request, res: Response) => { res.send('This is the boilerplate for Flint Messenger app') });
 
-  app.use('/profil', profileRoutes);
   app.use('/login', loginRoutes);
+  app.use('/profil', profileRoutes);
   app.use('/messages', messageRoutes);
 
   return app;

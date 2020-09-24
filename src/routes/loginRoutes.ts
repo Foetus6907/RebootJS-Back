@@ -3,6 +3,7 @@ import passport from 'passport';
 const router = Router();
 import {IProfil} from "../models/profils";
 import {IncorrectPasswordError, ProfilNotFoundError} from "../controllers/authentification";
+import authenticationRequired from "../middleware/authenticationRequire";
 
 router.post('/', (req: Request, res: Response) => {
     passport.authenticate('local', (err, profile: IProfil) => {
@@ -31,5 +32,12 @@ router.post('/', (req: Request, res: Response) => {
         }
     })(req, res);
 })
+
+router.get('/logout', (req: Request, res: Response) => {
+    if (req.isAuthenticated())
+        req.logout()
+        return res.status(200).send('User logout success')
+})
+
 
 export default router;

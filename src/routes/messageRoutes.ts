@@ -62,7 +62,7 @@ router.get("/message/:messageId", authenticationRequired, async (req: Request, r
 
 // Read all Message by user and conversationID
 router.get("/:conversationId", authenticationRequired, async (req: Request, res: Response) => {
-	console.log('byUserConversation')
+	// console.log('byUserConversation')
 	if(req.user) {
 		try {
 			const messages = await messagesController.getAllMessagesByUser(req.user as IProfil, req.params["conversationId"]);
@@ -78,13 +78,11 @@ router.get("/:conversationId", authenticationRequired, async (req: Request, res:
 
 // Read all Message by user and
 router.get("/", authenticationRequired, async (req: Request, res: Response) => {
-	console.log('byUserConversation', req.user)
+	// console.log('byUserConversation', req.user)
 	if(req.user) {
 		try {
 			const messages = await messagesController.getAllMessagesByUser(req.user as IProfil);
-			console.log('byUserConversation', messages)
-
-
+			// console.log('byUserConversation', messages)
 			return res.json(messages)
 		} catch (e) {
 			console.log("Error getting messages by user", e);
