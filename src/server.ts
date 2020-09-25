@@ -37,7 +37,12 @@ export function createExpressApp(config: IConfig): express.Express {
     secret: session_secret_key,
     resave: false,
     saveUninitialized: false,
-    store: sessionStore
+    store: sessionStore,
+    cookie: {
+      maxAge: 86400,
+      secure: 'auto',
+      sameSite: 'none'
+    }
   }))
 
   app.use (authenticationInitialize());
