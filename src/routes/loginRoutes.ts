@@ -36,7 +36,16 @@ router.post('/', (req: Request, res: Response) => {
 router.get('/logout', (req: Request, res: Response) => {
     if (req.isAuthenticated())
         req.logout()
-        return res.status(200).send('User logout success')
+        req.session?.destroy((error) => {
+            if (error) {
+                return res.status(200).send('User logout success but session not destroy')
+            }
+            else {
+                res.clearCookie('session_cookie_id');
+                req.session = undefined;
+                return res.status(200).send('User logout success')
+            }
+        })
 })
 
 
