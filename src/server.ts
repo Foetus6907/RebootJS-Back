@@ -38,9 +38,6 @@ export function createExpressApp(config: IConfig): express.Express {
     resave: false,
     saveUninitialized: false,
     store: sessionStore,
-    cookie: {
-      sameSite: 'lax',
-    }
   }))
 
   app.use (authenticationInitialize());
