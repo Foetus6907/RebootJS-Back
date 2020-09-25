@@ -39,8 +39,7 @@ export function createExpressApp(config: IConfig): express.Express {
     saveUninitialized: false,
     store: sessionStore,
     cookie: {
-      maxAge: 86400,
-      secure: 'auto',
+      secure: true,
       sameSite: 'none'
     }
   }))
