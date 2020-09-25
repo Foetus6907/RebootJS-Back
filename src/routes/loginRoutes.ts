@@ -24,13 +24,6 @@ router.post('/', (req: Request, res: Response) => {
                     console.log('error', error)
                     return res.status(500).send('Il y a une erreur pendant la connection')
                 }
-
-
-                res.cookie('session_cookie_id', 'secretKey', { sameSite: 'none', secure: true })
-                res.setHeader('set-cookie', [
-                    'session_cookie_id=secretKey; SameSite=None; Secure',
-                ]);
-
                 return res.send(profile.getSafeProfil())
 
             })
