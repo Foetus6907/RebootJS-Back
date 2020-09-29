@@ -31,14 +31,31 @@ export function createExpressApp(config: IConfig): express.Express {
   app.use(express.json());
   app.use(cors({credentials: true, origin: true}))
 
-
-  app.use(session({
+  const sessionConfig : session.SessionOptions = {
     name: session_cookie_name,
     secret: session_secret_key,
     resave: false,
     saveUninitialized: false,
     store: sessionStore,
-  }))
+    cookie: {}
+  }
+
+  if (process.env.NODE_ENV === 'production') {
+    app.set('trust proxy', 1); // trust first proxy
+    sessionConfig.cookie = {
+      secure: true,
+      sameSite: 'none'
+    }
+  }
+  app.use(session(sessionConfig))
+
+  // app.use(session({
+  //   name: session_cookie_name,
+  //   secret: session_secret_key,
+  //   resave: false,
+  //   saveUninitialized: false,
+  //   store: sessionStore,
+  // }))
 
   app.use (authenticationInitialize());
   app.use(authenticationSession());
